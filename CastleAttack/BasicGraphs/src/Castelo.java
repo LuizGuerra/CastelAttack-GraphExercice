@@ -49,16 +49,27 @@ public class Castelo {
         this.castelosPara.add(c);
     }
 
-    public void adicionaPara(Castelo c){
-        this.castelosPara.add(c);
-    }
-
     public int getNum() {
         return num;
     }
 
     public void setNum(int num) {
         this.num = num;
+    }
+
+    public int tamanhoCastelosPara(){
+        return this.castelosPara.size();
+    }
+
+    public void printTodosPara(){
+        System.out.println("Todos a partir de "+this.num);
+        int size = this.castelosPara.size();
+        for (int i = 0; i<size; i++){
+            Castelo c = this.castelosPara.poll();
+            System.out.println(c.getNum()+" -- "+c.getGuarnicao());
+        }
+        System.out.println("--Fim--");
+        System.out.println("\n");
     }
 
     class CasteloComparator implements Comparator<Castelo>{

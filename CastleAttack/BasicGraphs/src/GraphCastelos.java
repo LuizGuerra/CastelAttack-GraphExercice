@@ -96,7 +96,7 @@ public class GraphCastelos {
      * @return the number of vertices <em>V</em>, followed by the number of edges <em>E</em>,
      *         followed by the <em>V</em> adjacency lists
      */
-    public String toString() {
+    public String toString() { //Retorna o numero de edges * 2
         StringBuilder s = new StringBuilder();
         s.append(V + " vertices, " + E + " edges " + NEWLINE);
         for (int v = 0; v < V; v++) {
@@ -167,7 +167,7 @@ public class GraphCastelos {
      */
     public static void main(String[] args) throws IOException {
 
-        BufferedReader bf = new BufferedReader(new FileReader(System.getProperty("user.dir")+"\\CasosTeste\\teste.txt"));
+        BufferedReader bf = new BufferedReader(new FileReader("/Luiz/Faculdade/CastelAttack-GraphExercice/CastleAttack/CasosTeste/teste.txt"));
         String cur = "";
 
         int V = 0;
@@ -191,12 +191,14 @@ public class GraphCastelos {
                 countAux++;
             }
             else if (separado.length == 2){
-                if(countAux >= V){ //Adicionou todos os castelos e está colocando as estradas entre eles
+                if(countAux >= V){ //Adicionou todos os castelos e está colocando as estradas entre eles.
                     int casteloA = Integer.parseInt(separado[0]);
-                    int casteloB = Integer.parseInt(separado[0]);
+                    int casteloB = Integer.parseInt(separado[1]);
                     gc.addEdge(castelos.get(casteloA),castelos.get(casteloB));
+                    castelos.get(casteloA).adicionaCasteloPara(castelos.get(casteloB));
+                    System.out.println(castelos.get(casteloA).getCastelosPara().size());
                 }
-                else{
+                else{ //Adicionando os castelos do arquivo txt.
                     Castelo c = new Castelo(Integer.parseInt(separado[0]),Integer.parseInt(separado[1]),'B');
                     castelos.add(c.getNum(),c);
                     countAux++;
@@ -205,6 +207,16 @@ public class GraphCastelos {
         }
 
         System.out.println(gc.toString());
+
+        System.out.println("--------//--------");
+
+        castelos.forEach(e->{
+            System.out.println(e.tamanhoCastelosPara());
+        });
+
+        castelos.forEach(e->{
+            e.printTodosPara();
+        });
 
     }
 
