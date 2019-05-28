@@ -11,6 +11,7 @@ public class GraphCastelos {
     private int V;
     private int E;
     private int exercitoDoMal;
+    private int exercitoAtualizado;
     private Bag<Castelo>[] adj;
 
     public GraphCastelos(int vert, int edges, int exer) {
@@ -159,6 +160,10 @@ public class GraphCastelos {
         this.exercitoDoMal = exercitoDoMal;
     }
 
+    public int getExercitoAtualizado() { return exercitoAtualizado; }
+
+    public void setExercitoAtualizado(int exercitoAtualizado) { this.exercitoAtualizado = exercitoAtualizado; }
+
 
     /**
      * Unit tests the {@code Graph} data type.
@@ -167,7 +172,7 @@ public class GraphCastelos {
      */
     public static void main(String[] args) throws IOException {
 
-        BufferedReader bf = new BufferedReader(new FileReader("/Luiz/Faculdade/CastelAttack-GraphExercice/CastleAttack/CasosTeste/teste.txt"));
+        BufferedReader bf = new BufferedReader(new FileReader(System.getProperty("user.dir")+"/CastleAttack/CasosTeste/teste.txt"));
         String cur = "";
 
         int V = 0;
@@ -185,9 +190,11 @@ public class GraphCastelos {
                 V = Integer.parseInt(separado[1]) + 1;
                 E = Integer.parseInt(separado[2]);
                 gc = new GraphCastelos(V,E,exercito);
-                castelos.get(0).setGuarnicao(exercito);
+                castelos.get(0).setGuarnicao(50);
                 castelos.get(0).setMarcacao('B');
                 castelos.get(0).setNum(0);
+                gc.setExercitoDoMal(exercito);
+                gc.setExercitoAtualizado(exercito-50);
                 countAux++;
             }
             else if (separado.length == 2){
@@ -207,6 +214,23 @@ public class GraphCastelos {
         System.out.println(gc.toString());
 
         System.out.println("--------//--------");
+
+        Castelo inicial = castelos.get(0);
+        Castelo aux = gc.adj[0].iterator().next(); //Primeiro da lista. Aux será utilizado na iteração
+        int count = 0;
+
+        System.out.println(aux.getNum());
+
+        for(int i = 0; i<gc.adj[0].size(); i++){
+            if(gc.getExercitoAtualizado() > aux.getGuarnicao()*2){ //Pode conquistar
+                aux.setGuarnicao(aux.getGuarnicao()+50);
+                gc.setExercitoAtualizado(gc.getExercitoAtualizado()-50);
+                count++;
+            }
+            else{ //Não pode conquistar
+
+            }
+        }
 
     }
 
