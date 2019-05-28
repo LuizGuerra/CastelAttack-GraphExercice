@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.Stack;
 
 public class GraphCastelos {
 
@@ -13,6 +14,7 @@ public class GraphCastelos {
     private int exercitoDoMal;
     private int exercitoAtualizado;
     private Bag<Castelo>[] adj;
+    private ArrayList<Castelo> castelos;
 
     public GraphCastelos(int vert, int edges, int exer) {
         setE(edges);
@@ -164,6 +166,21 @@ public class GraphCastelos {
 
     public void setExercitoAtualizado(int exercitoAtualizado) { this.exercitoAtualizado = exercitoAtualizado; }
 
+    public ArrayList<Castelo> getCastelos() { return castelos; }
+
+    public void setCastelos(ArrayList<Castelo> castelos) { this.castelos = castelos; }
+
+    public void dominaCastelos(GraphCastelos gc){
+        int qtd = 0;
+        Stack elem = new Stack();
+        Castelo aux = gc.getCastelos().get(0);
+        dominaCastelos(gc,qtd,elem,aux);
+    }
+
+    private void dominaCastelos(GraphCastelos gc, int qtd, Stack elem, Castelo aux){
+
+    }
+
 
     /**
      * Unit tests the {@code Graph} data type.
@@ -211,6 +228,8 @@ public class GraphCastelos {
             }
         }
 
+        gc.setCastelos(castelos);
+
         System.out.println(gc.toString());
 
         System.out.println("--------//--------");
@@ -221,16 +240,7 @@ public class GraphCastelos {
 
         System.out.println(aux.getNum());
 
-        for(int i = 0; i<gc.adj[0].size(); i++){
-            if(gc.getExercitoAtualizado() > aux.getGuarnicao()*2){ //Pode conquistar
-                aux.setGuarnicao(aux.getGuarnicao()+50);
-                gc.setExercitoAtualizado(gc.getExercitoAtualizado()-50);
-                count++;
-            }
-            else{ //Não pode conquistar
-
-            }
-        }
+        System.out.println(count);
 
     }
 
