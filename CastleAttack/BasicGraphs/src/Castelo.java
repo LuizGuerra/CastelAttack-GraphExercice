@@ -7,7 +7,6 @@ public class Castelo {
     private int num;
     private int guarnicao;
     private char marcacao;
-    private PriorityQueue<Castelo> castelosPara = new PriorityQueue<Castelo>(25,new CasteloComparator());
 
     public Castelo(int num, int guarnicao, char marcacao) {
         this.guarnicao = guarnicao;
@@ -37,39 +36,12 @@ public class Castelo {
         this.marcacao = marcacao;
     }
 
-    public PriorityQueue<Castelo> getCastelosPara() {
-        return castelosPara;
-    }
-
-    public void setCastelosPara(PriorityQueue<Castelo> castelosPara) {
-        this.castelosPara = castelosPara;
-    }
-
-    public void adicionaCasteloPara(Castelo c){
-        this.castelosPara.add(c);
-    }
-
     public int getNum() {
         return num;
     }
 
     public void setNum(int num) {
         this.num = num;
-    }
-
-    public int tamanhoCastelosPara(){
-        return this.castelosPara.size();
-    }
-
-    public void printTodosPara(){
-        System.out.println("Todos a partir de "+this.num);
-        int size = this.castelosPara.size();
-        for (int i = 0; i<size; i++){
-            Castelo c = this.castelosPara.poll();
-            System.out.println(c.getNum()+" -- "+c.getGuarnicao());
-        }
-        System.out.println("--Fim--");
-        System.out.println("\n");
     }
 
     class CasteloComparator implements Comparator<Castelo>{

@@ -195,8 +195,6 @@ public class GraphCastelos {
                     int casteloA = Integer.parseInt(separado[0]);
                     int casteloB = Integer.parseInt(separado[1]);
                     gc.addEdge(castelos.get(casteloA),castelos.get(casteloB));
-                    castelos.get(casteloA).adicionaCasteloPara(castelos.get(casteloB));
-                    System.out.println(castelos.get(casteloA).getCastelosPara().size());
                 }
                 else{ //Adicionando os castelos do arquivo txt.
                     Castelo c = new Castelo(Integer.parseInt(separado[0]),Integer.parseInt(separado[1]),'B');
@@ -209,14 +207,6 @@ public class GraphCastelos {
         System.out.println(gc.toString());
 
         System.out.println("--------//--------");
-
-        castelos.forEach(e->{
-            System.out.println(e.tamanhoCastelosPara());
-        });
-
-        castelos.forEach(e->{
-            e.printTodosPara();
-        });
 
     }
 
