@@ -6,17 +6,17 @@ public class Castelo {
 
     private int num;
     private int guarnicao;
-    private char marcacao;
+    private boolean marcacao;
 
-    public Castelo(int num, int guarnicao, char marcacao) {
+    public Castelo(int num, int guarnicao) {
         this.guarnicao = guarnicao;
-        this.marcacao = marcacao;
+        this.marcacao = false;
         this.num = num;
     }
 
     public Castelo(){
         this.guarnicao = 0;
-        this.marcacao = 0;
+        this.marcacao = false;
         this.num = 0;
     }
 
@@ -28,12 +28,12 @@ public class Castelo {
         this.guarnicao = guarnicao;
     }
 
-    public char getMarcacao() {
+    public boolean getMarcacao() {
         return marcacao;
     }
 
-    public void setMarcacao(char marcacao) {
-        this.marcacao = marcacao;
+    public void setMarcacao(boolean state) {
+        this.marcacao = state;
     }
 
     public int getNum() {

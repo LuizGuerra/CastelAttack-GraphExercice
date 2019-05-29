@@ -16,6 +16,16 @@ public class GraphCastelos {
     private Bag<Castelo>[] adj;
     private ArrayList<Castelo> castelos;
 
+    public int getQtdDominados() {
+        return qtdDominados;
+    }
+
+    public void setQtdDominados(int qtdDominados) {
+        this.qtdDominados = qtdDominados;
+    }
+
+    private int qtdDominados;
+
     public GraphCastelos(int vert, int edges, int exer) {
         setE(edges);
         setV(vert);
@@ -24,9 +34,12 @@ public class GraphCastelos {
         for (int v = 0; v < V; v++) {
             adj[v] = new Bag<Castelo>();
         }
+        this.qtdDominados = 0;
     }
 
-    public GraphCastelos(){}
+    public GraphCastelos(){
+        this.qtdDominados = 0;
+    }
 
     /**
      * Returns the number of vertices in this graph.
@@ -170,15 +183,36 @@ public class GraphCastelos {
 
     public void setCastelos(ArrayList<Castelo> castelos) { this.castelos = castelos; }
 
-    public void dominaCastelos(GraphCastelos gc){
-        int qtd = 0;
-        Stack elem = new Stack();
-        Castelo aux = gc.getCastelos().get(0);
-        dominaCastelos(gc,qtd,elem,aux);
+    public void dominaCastelos(){
+        Stack<Integer> elem = new Stack<>();
+        elem.push(0);
+        dominaCastelos(this,elem,0);
     }
 
-    private void dominaCastelos(GraphCastelos gc, int qtd, Stack elem, Castelo aux){
+    private void dominaCastelos(GraphCastelos gc, Stack<Integer> elem, int castelo){
+        if(castelo == 0){ //Primeiro castelo
+            Castelo c;
+            while(gc.adj[0].iterator().hasNext()){
+                c = gc.adj[0].iterator().next();
 
+            }
+            //dominaCastelos(gc,elem,c.getNum());
+        }
+        else{ //Outros castelos
+            if(gc.castelos.get(castelo).getGuarnicao()*2 + 50 < gc.getExercitoAtualizado()){ //Conquista
+                gc.setQtdDominados(gc.getQtdDominados() + 1);
+                gc.setExercitoAtualizado((gc.getExercitoAtualizado() - 50) - (gc.castelos.get(castelo).getGuarnicao()*2));
+                gc.castelos.get(castelo).setMarcacao(true);
+                elem.push(castelo);
+                dominaCastelos(gc,elem,gc.adj[castelo].iterator().next().getNum());
+            }
+            else{ //Não conquista
+                //System.out.println("Peeking "+elem.peek());
+                //System.out.println(gc.castelos.get(elem.peek()).getMarcacao());
+                elem.pop();
+                dominaCastelos(gc,elem,elem.peek());
+            }
+        }
     }
 
 
@@ -189,7 +223,7 @@ public class GraphCastelos {
      */
     public static void main(String[] args) throws IOException {
 
-        BufferedReader bf = new BufferedReader(new FileReader(System.getProperty("user.dir")+"/CastleAttack/CasosTeste/teste.txt"));
+        BufferedReader bf = new BufferedReader(new FileReader(System.getProperty("user.dir")+"/CastleAttack/CasosTeste/caso30.txt"));
         String cur = "";
 
         int V = 0;
@@ -208,7 +242,7 @@ public class GraphCastelos {
                 E = Integer.parseInt(separado[2]);
                 gc = new GraphCastelos(V,E,exercito);
                 castelos.get(0).setGuarnicao(50);
-                castelos.get(0).setMarcacao('B');
+                castelos.get(0).setMarcacao(false);
                 castelos.get(0).setNum(0);
                 gc.setExercitoDoMal(exercito);
                 gc.setExercitoAtualizado(exercito-50);
@@ -221,7 +255,7 @@ public class GraphCastelos {
                     gc.addEdge(castelos.get(casteloA),castelos.get(casteloB));
                 }
                 else{ //Adicionando os castelos do arquivo txt.
-                    Castelo c = new Castelo(Integer.parseInt(separado[0]),Integer.parseInt(separado[1]),'B');
+                    Castelo c = new Castelo(Integer.parseInt(separado[0]),Integer.parseInt(separado[1]));
                     castelos.add(c.getNum(),c);
                     countAux++;
                 }
@@ -232,15 +266,14 @@ public class GraphCastelos {
 
         System.out.println(gc.toString());
 
-        System.out.println("--------//--------");
+        System.out.println("--------//--------\n");
 
         Castelo inicial = castelos.get(0);
         Castelo aux = gc.adj[0].iterator().next(); //Primeiro da lista. Aux será utilizado na iteração
-        int count = 0;
 
-        System.out.println(aux.getNum());
+        gc.dominaCastelos();
 
-        System.out.println(count);
+        System.out.println(gc.getQtdDominados());
 
     }
 
