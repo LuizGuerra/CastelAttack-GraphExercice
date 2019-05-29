@@ -1,8 +1,5 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 import java.util.Stack;
 
 public class GraphCastelos {
@@ -14,6 +11,7 @@ public class GraphCastelos {
     private int exercitoDoMal;
     private int exercitoAtualizado;
     private Bag<Castelo>[] adj;
+    private ArrayList<Integer>[] listaAdj;
     private ArrayList<Castelo> castelos;
 
     public int getQtdDominados() {
@@ -31,8 +29,10 @@ public class GraphCastelos {
         setV(vert);
         setExercitoDoMal(exer);
         adj = (Bag<Castelo>[]) new Bag[V];
+        listaAdj = (ArrayList<Integer>[]) new ArrayList[V];
         for (int v = 0; v < V; v++) {
             adj[v] = new Bag<Castelo>();
+            listaAdj[v] = new ArrayList<>();
         }
         this.qtdDominados = 0;
     }
@@ -77,6 +77,7 @@ public class GraphCastelos {
         validateVertex(b);
         E++;
         adj[a.getNum()].add(b);
+        listaAdj[a.getNum()].add(b.getNum());
         adj[b.getNum()].add(a);
     }
 
@@ -191,12 +192,18 @@ public class GraphCastelos {
 
     private void dominaCastelos(GraphCastelos gc, Stack<Integer> elem, int castelo){
         if(castelo == 0){ //Primeiro castelo
-            Castelo c;
-            while(gc.adj[0].iterator().hasNext()){
-                c = gc.adj[0].iterator().next();
-
+            Castelo c = new Castelo();
+            Iterator<Castelo> it = gc.adj[0].iterator();
+            while(it.hasNext()){
+                c = it.next();
+                if(!c.getMarcacao())
+                    break;
             }
-            //dominaCastelos(gc,elem,c.getNum());
+            if(c.getMarcacao()){
+                return;
+            }else{
+                dominaCastelos(gc,elem,c.getNum());
+            }
         }
         else{ //Outros castelos
             if(gc.castelos.get(castelo).getGuarnicao()*2 + 50 < gc.getExercitoAtualizado()){ //Conquista
@@ -207,12 +214,27 @@ public class GraphCastelos {
                 dominaCastelos(gc,elem,gc.adj[castelo].iterator().next().getNum());
             }
             else{ //Não conquista
-                //System.out.println("Peeking "+elem.peek());
-                //System.out.println(gc.castelos.get(elem.peek()).getMarcacao());
                 elem.pop();
+                System.out.println("Peeking "+elem.peek());
+                System.out.println(gc.castelos.get(elem.peek()).getMarcacao());
                 dominaCastelos(gc,elem,elem.peek());
             }
         }
+    }
+
+    private void dfsPrivate(GraphCastelos gc, int v, int count) {
+        count++;
+        for (Castelo c : gc.adj[v]) {
+            System.out.println(c.getNum());
+            if (!c.getMarcacao()) {
+                dfsPrivate(gc, c.getNum(),count);
+            }
+        }
+    }
+
+    public void dfs(){
+        int count = 0;
+        dfsPrivate(this,0,count);
     }
 
 
@@ -271,9 +293,7 @@ public class GraphCastelos {
         Castelo inicial = castelos.get(0);
         Castelo aux = gc.adj[0].iterator().next(); //Primeiro da lista. Aux será utilizado na iteração
 
-        gc.dominaCastelos();
-
-        System.out.println(gc.getQtdDominados());
+        gc.dfs();
 
     }
 
